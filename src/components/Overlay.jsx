@@ -7,9 +7,11 @@ import logo from "../assets/logo.svg"; // Adjust the path to your SVG file
 import "../index.css";
 
 export const slideAtom = atom(0);
+export const homeAtom = atom(0);
 
 export const Overlay = () => {
   const [slide, setSlide] = useAtom(slideAtom);
+  const [home, setHome] = useAtom(homeAtom);
   const [displaySlide, setDisplaySlide] = useState(slide);
   const [visible, setVisible] = useState(false);
 
@@ -27,9 +29,15 @@ export const Overlay = () => {
     }, 2600);
   }, [slide]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setHome((prev) => prev);
+    }, 4000);
+  }, [home]);
+
   return (
     <div className={`overlay ${visible ? "visible" : "invisible"}`}>
-      <img src={logo} alt="Logo" className="logo" />
+      <img src={logo} alt="Logo" className="logo" onClick={() => setHome((prev) => (prev ? 0 : 1))} />
       <div className="nav">
         <img
           src={leftArrow}
