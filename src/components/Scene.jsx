@@ -35,45 +35,47 @@ export const Scene =({mainColor, path, ...props})=>{
                     maxPolarAngle={DEG2RAD * 75}
                     minDistance={6}
                     maxDistance={10}
-                    autoRotateSpeed={0.5}
+                    autoRotateSpeed={0.3}
                 />
                 <primitive object={scene} scale={ratioScale} />
-                <ambientLight intensity={0.1} />
+                <ambientLight intensity={1} />
                 <AccumulativeShadows
                     frames={100}
                     alphaTest={0.9}
                     scale={30}
-                    position={[0, -0.005, 0]}
-                    color="pink"
+                    position={[0, -0.008, 0]}
                     opacity={0.8}
                 >
                 <RandomizedLight
                     amount={4}
                     radius={9}
-                    intensity={0.8}
+                    intensity={10}
                     ambient={0.25}
                     position={[10, 5, 15]}
-                />
-                <RandomizedLight
-                    amount={4}
-                    radius={5}
-                    intensity={0.5}
-                    position={[-5, 5, 15]}
-                    bias={0.001}
                 />
                 </AccumulativeShadows>
                 <Environment blur={0.8} background>
                 <Sphere scale={15}>
                     <meshBasicMaterial color={mainColor} side={THREE.BackSide} />
                 </Sphere>
+
                 <Lightformer
-                    position={[50, 2, 0]}
-                    form="ring" // circle | ring | rect (optional, default = rect)
-                    intensity={1} // power level (optional = 1)
-                    color="white" // (optional = white)
-                    scale={[10, 5]} // Scale it any way you prefer (optional = [1, 1])
-                    target={[0, 0, 0]} // Target position (optional = undefined)
+                    position={[0, 5, -2]}
+                    form="ring" 
+                    intensity={1.5} 
+                    color="#BA5FFF" 
+                    scale={[10, 5]} 
+                    target={[0, 0, 0]}
                 />
+                <Lightformer
+                    position={[0, 5, -2]}
+                    form="rect" 
+                    intensity={2} 
+                    color="#F0CDCD" 
+                    scale={[10, 5]} 
+                    target={[0, 0, 0]}
+                />
+                
                 </Environment>
             </group>
         </>

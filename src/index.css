@@ -62,7 +62,7 @@ body{
 }
 
 .content {
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.9), transparent);
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.512), transparent);
   padding-top: 5rem;
   padding-bottom: 2.5rem;
   padding-left: 1rem;
@@ -76,10 +76,12 @@ body{
 .title {
   font-size: 3rem;
   font-weight: 800;
+  margin: 0;
 }
 
 .description {
-  opacity: 0.6;
+  opacity: 0.8;
+  font-size: 1.3rem;
   font-style: italic;
 }
 
