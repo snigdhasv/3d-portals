@@ -32,7 +32,7 @@ body{
 
 .logo {
   width: 10rem;
-  margin: 2rem auto;
+  margin: 1rem auto;
   pointer-events: auto;
   cursor: pointer;
 }

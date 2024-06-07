@@ -88,10 +88,10 @@ const CameraHandler = ({ slideDistance }) => {
   const panOut = async()=>{
 
     await CameraControlsRef.current.setLookAt(
-      (viewport.width * (scenes.length-0.5) )/2, //look at center of the three scenes
+      (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1) )/2, //look at center of the three scenes
       viewport.height/2, //y position is also centered 
       30, //pan out on the z axis
-      (viewport.width * (scenes.length-0.5))/2, //we're still looking at the center of three slides 
+      (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1))/2, //we're still looking at the center of three slides 
       0,
       0,
       true
@@ -156,16 +156,37 @@ export const Experience = () => {
   const [,setSlide]=useAtom(slideAtom);
   const [, setHome]=useAtom(homeAtom);
 
-  const handleSlideClick = (index) =>{
-    setSlide(index);
-    setHome(false);
-  };
+  // const handleSlideClick = (index) =>{
+  //   setSlide(index);
+  //   setHome(false);
+  // };
 
   return (
     <>
       <ambientLight intensity={0.2} />
       <Environment preset={"city"} />
       <CameraHandler slideDistance={slideDistance} />
+      <group>
+        <mesh position-y={viewport.height / 2 + 1.5}>
+          <sphereGeometry args={[0.7, 64, 64]} />
+          <MeshDistortMaterial color={scenes[0].mainColor} speed={3} />
+        </mesh>
+
+        <mesh
+          position-x={viewport.width + slideDistance}
+          position-y={viewport.height / 2 + 1.5}
+        >
+          <sphereGeometry args={[0.7, 64, 64]} />
+          <MeshDistortMaterial color={scenes[1].mainColor} speed={3} />
+        </mesh>
+
+        <mesh position-x={2 * (viewport.width + slideDistance)}
+          position-y={viewport.height / 2 + 1.5}>
+          <sphereGeometry args={[0.7, 64, 64]} />
+        
+          <MeshDistortMaterial color={scenes[2].mainColor} speed={3} />
+        </mesh>
+      </group>
       <Grid
         position-y={-viewport.height / 2}
         sectionSize={1}
