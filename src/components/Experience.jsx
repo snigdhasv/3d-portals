@@ -13,7 +13,7 @@ import { useControls } from "leva";
 import { useEffect, useRef } from "react";
 import { homeAtom, slideAtom } from "./Overlay";
 import { Scene } from "./Scene";
-
+import {dispAtom} from "./Overlay"
 
 //Array of three scenes with three different models
 export const scenes = [
@@ -195,6 +195,7 @@ export const Experience = () => {
 
   const [,setSlide]=useAtom(slideAtom);
   const [, setHome]=useAtom(homeAtom);
+  const [, setHomeDisp]=useAtom(dispAtom);
   
   
 
@@ -202,6 +203,7 @@ export const Experience = () => {
     sphereSlidePan();
     setSlide(index);
     setHome(false);
+    setHomeDisp(true);
   };
 
   return (
@@ -215,7 +217,7 @@ export const Experience = () => {
             key={index}
             position-x={index * (viewport.width + slideDistance)}
             position-y={viewport.height / 2 + 1.5}
-            onClick={() => {handleSphereClick(index); setHome(false)}}
+            onClick={() => {handleSphereClick(index)}}
           >
             <sphereGeometry args={[0.7, 64, 64]} />
             <MeshDistortMaterial color={scene.mainColor} speed={3} />

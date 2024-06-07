@@ -8,13 +8,15 @@ import "../index.css";
 
 export const slideAtom = atom(0);
 export const homeAtom = atom(false);
+export const dispAtom = atom(true);
 
 export const Overlay = () => {
   const [slide, setSlide] = useAtom(slideAtom);
   const [home, setHome] = useAtom(homeAtom);
   const [displaySlide, setDisplaySlide] = useState(slide);
   const [visible, setVisible] = useState(false);
-  const [homeDisp, setHomeDisp] = useState(true);
+  const [homeDisp, setHomeDisp] = useAtom(dispAtom);
+  
   useEffect(() => {
     setTimeout(() => {
       setVisible(true);
@@ -26,7 +28,7 @@ export const Overlay = () => {
     setTimeout(() => {
       setDisplaySlide(slide);
       setVisible(true);
-    }, 2600);
+    }, 2000);
   }, [slide]);
 
 

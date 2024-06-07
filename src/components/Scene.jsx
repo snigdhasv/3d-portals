@@ -39,6 +39,7 @@ export const Scene =({mainColor, path, ...props})=>{
                     maxDistance={10}
                     autoRotateSpeed={0.3}
                 />
+
                 <primitive object={scene} scale={ratioScale} />
                 <ambientLight intensity={1} />
                 <AccumulativeShadows
