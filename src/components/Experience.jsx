@@ -121,6 +121,27 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
+  const sphereSlidePan = async() => {
+    await CameraControlsRef.current.setLookAt(
+      (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1) )/2,
+      0,
+      30,
+      slide * (viewport.width + slideDistance),
+      0,
+      0,
+      true
+    );
+    await CameraControlsRef.current.setLookAt(
+      slide * (viewport.width + slideDistance),
+      0,
+      5,
+      slide * (viewport.width + slideDistance),
+      0,
+      0,
+      true
+    );
+  }
+
   useEffect(() => {
     const resetTimeout = setTimeout(() => {
       if(home){
@@ -130,7 +151,7 @@ const CameraHandler = ({ slideDistance }) => {
       }
     }, 1000);
     return () => clearTimeout(resetTimeout);
-  }, [viewport, home]);
+  }, [slide, home]);
 
   useEffect(()=>{
     if(home) return;
@@ -141,6 +162,7 @@ const CameraHandler = ({ slideDistance }) => {
     moveToSlide();
     lastSlide.current=slide;
   },[slide,home]);
+
 
   return (
     <CameraControls
@@ -159,6 +181,8 @@ const CameraHandler = ({ slideDistance }) => {
   );
 };
 
+
+
 export const Experience = () => {
   const viewport = useThree((state) => state.viewport);
   const { slideDistance } = useControls({
@@ -172,7 +196,10 @@ export const Experience = () => {
   const [,setSlide]=useAtom(slideAtom);
   const [, setHome]=useAtom(homeAtom);
   
+  
+
   const handleSphereClick = (index) =>{
+    sphereSlidePan();
     setSlide(index);
     setHome(false);
   };

@@ -34,13 +34,12 @@ export const Overlay = () => {
  function handleLogoClick()
  {
     setHome(!home);
-    setTimeout(() => {
+    useEffect(()=>{setTimeout(() => {
       if(home)
-        setHomeDisp(true);
+        setHomeDisp(false);
       else 
         setHomeDisp(false);
-    }, 2600);
-    
+    }, 1000);})
   };
 
   return (
