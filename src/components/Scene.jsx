@@ -13,8 +13,9 @@ import React, { useEffect } from "react";
 import { DEG2RAD } from "three/src/math/MathUtils";
 
 export const Scene =({mainColor, path, ...props})=>{
-    const{nodes, materials, scene} = useGLTF(path);
+    const{nodes, materials, scene} = useGLTF(path); //load 3d scene
     useEffect(()=>{
+        //go through each object to cast shadows
         scene.traverse((child)=>{
             if(child.isMesh){
                 child.castShadow = true;
@@ -28,6 +29,7 @@ export const Scene =({mainColor, path, ...props})=>{
         <>
             <color attach="background" args={["#ffffff"]} />
             <group {...props} dispose={null}>
+                {/* create a new camera for each scene and have orbit controls for each scene */}
                 <PerspectiveCamera makeDefault position={[3, 3, 8]} near={0.5} />
                 <OrbitControls
                     autoRotate
@@ -55,6 +57,7 @@ export const Scene =({mainColor, path, ...props})=>{
                 />
                 </AccumulativeShadows>
                 <Environment blur={0.8} background>
+                {/* sphere is the background */}
                 <Sphere scale={15}>
                     <meshBasicMaterial color={mainColor} side={THREE.BackSide} />
                 </Sphere>
