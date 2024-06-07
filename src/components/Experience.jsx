@@ -99,21 +99,36 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
+  const panIn = async()=>{
+
+    await CameraControlsRef.current.setLookAt(
+      slide * (viewport.width + slideDistance),
+      0,
+      30,
+      slide * (viewport.width + slideDistance),
+      0,
+      0,
+      true
+    );
+    await CameraControlsRef.current.setLookAt(
+      slide * (viewport.width + slideDistance),
+      0,
+      5,
+      slide * (viewport.width + slideDistance),
+      0,
+      0,
+      true
+    );
+  };
+
   useEffect(() => {
     const resetTimeout = setTimeout(() => {
       if(home){
         panOut();
       } else{
-        CameraControlsRef.current.setLookAt(
-          slide * (viewport.width + slideDistance),
-          0,
-          5,
-          slide * (viewport.width + slideDistance),
-          0,
-          0
-        );
+        panIn();
       }
-    }, 200);
+    }, 1000);
     return () => clearTimeout(resetTimeout);
   }, [viewport, home]);
 
@@ -173,7 +188,7 @@ export const Experience = () => {
             key={index}
             position-x={index * (viewport.width + slideDistance)}
             position-y={viewport.height / 2 + 1.5}
-            onClick={() => handleSphereClick(index)}
+            onClick={() => {handleSphereClick(index); setHome(false)}}
           >
             <sphereGeometry args={[0.7, 64, 64]} />
             <MeshDistortMaterial color={scene.mainColor} speed={3} />

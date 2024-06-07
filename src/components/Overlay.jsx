@@ -14,7 +14,7 @@ export const Overlay = () => {
   const [home, setHome] = useAtom(homeAtom);
   const [displaySlide, setDisplaySlide] = useState(slide);
   const [visible, setVisible] = useState(false);
-
+  const [homeDisp, setHomeDisp] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       setVisible(true);
@@ -29,14 +29,24 @@ export const Overlay = () => {
     }, 2600);
   }, [slide]);
 
-  const handleLogoClick = () =>{
+
+
+ function handleLogoClick()
+ {
     setHome(!home);
+    setTimeout(() => {
+      if(home)
+        setHomeDisp(true);
+      else 
+        setHomeDisp(false);
+    }, 2600);
+    
   };
 
   return (
     <div className={`overlay ${visible ? "visible" : "invisible"}`}>
       <img src={logo} alt="Logo" className="logo" onClick={handleLogoClick} />
-      {!home && (
+      {homeDisp && (
       <>
         <div className="nav">
           <img
