@@ -44,6 +44,7 @@ const CameraHandler = ({ slideDistance }) => {
   const lastSlide = useRef(0);
   const[home,setHome]=useAtom(homeAtom);
 
+
   const { dollyDistance } = useControls({
     dollyDistance: {
       value: 10,
@@ -155,11 +156,11 @@ export const Experience = () => {
 
   const [,setSlide]=useAtom(slideAtom);
   const [, setHome]=useAtom(homeAtom);
-
-  // const handleSlideClick = (index) =>{
-  //   setSlide(index);
-  //   setHome(false);
-  // };
+  
+  const handleSphereClick = (index) =>{
+    setSlide(index);
+    setHome(false);
+  };
 
   return (
     <>
@@ -167,25 +168,17 @@ export const Experience = () => {
       <Environment preset={"city"} />
       <CameraHandler slideDistance={slideDistance} />
       <group>
-        <mesh position-y={viewport.height / 2 + 1.5}>
-          <sphereGeometry args={[0.7, 64, 64]} />
-          <MeshDistortMaterial color={scenes[0].mainColor} speed={3} />
-        </mesh>
-
-        <mesh
-          position-x={viewport.width + slideDistance}
-          position-y={viewport.height / 2 + 1.5}
-        >
-          <sphereGeometry args={[0.7, 64, 64]} />
-          <MeshDistortMaterial color={scenes[1].mainColor} speed={3} />
-        </mesh>
-
-        <mesh position-x={2 * (viewport.width + slideDistance)}
-          position-y={viewport.height / 2 + 1.5}>
-          <sphereGeometry args={[0.7, 64, 64]} />
-        
-          <MeshDistortMaterial color={scenes[2].mainColor} speed={3} />
-        </mesh>
+        {scenes.map((scene, index) => (
+          <mesh
+            key={index}
+            position-x={index * (viewport.width + slideDistance)}
+            position-y={viewport.height / 2 + 1.5}
+            onClick={() => handleSphereClick(index)}
+          >
+            <sphereGeometry args={[0.7, 64, 64]} />
+            <MeshDistortMaterial color={scene.mainColor} speed={3} />
+          </mesh>
+        ))}
       </group>
       <Grid
         position-y={-viewport.height / 2}
