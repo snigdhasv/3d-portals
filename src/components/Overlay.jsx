@@ -11,18 +11,21 @@ export const homeAtom = atom(false);
 export const dispAtom = atom(true);
 
 export const Overlay = () => {
-  const [slide, setSlide] = useAtom(slideAtom);
-  const [home, setHome] = useAtom(homeAtom);
-  const [displaySlide, setDisplaySlide] = useState(slide);
-  const [visible, setVisible] = useState(false);
-  const [homeDisp, setHomeDisp] = useAtom(dispAtom);
+  const [slide, setSlide] = useAtom(slideAtom); //represents current slide indext
+  const [home, setHome] = useAtom(homeAtom); //indicates if logo was clicked
+  const [displaySlide, setDisplaySlide] = useState(slide); //index of slide to be displayed
+  const [visible, setVisible] = useState(false); //visibility of overlay
+  const [homeDisp, setHomeDisp] = useAtom(dispAtom); //if UI elements should be displayed or not
   
+
+  //delayed fade in effect for overlay
   useEffect(() => {
     setTimeout(() => {
       setVisible(true);
     }, 1000);
   }, []);
 
+  //slide transition
   useEffect(() => {
     setVisible(false);
     setTimeout(() => {
@@ -42,7 +45,6 @@ export const Overlay = () => {
       else 
         setHomeDisp(false);
     }, 1000);
-    
   };
 
   return (

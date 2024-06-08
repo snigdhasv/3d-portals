@@ -38,13 +38,13 @@ export const scenes = [
 ];
 
 const CameraHandler = ({ slideDistance }) => {
-  const viewport = useThree((state) => state.viewport);
   const CameraControlsRef = useRef();
+  const viewport = useThree((state) => state.viewport);
   const [slide,setSlide] = useAtom(slideAtom); //slide value gives the slide number
   const lastSlide = useRef(0);
-  const[home,setHome]=useAtom(homeAtom);
+  const[home,setHome]=useAtom(homeAtom); //UI in home state or not
 
-
+  //Controls for camera's distance from the scene
   const { dollyDistance } = useControls({
     dollyDistance: {
       value: 10,
@@ -87,7 +87,6 @@ const CameraHandler = ({ slideDistance }) => {
   };
 
   const panOut = async()=>{
-
     await CameraControlsRef.current.setLookAt(
       (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1) )/2, //look at center of the three scenes
       viewport.height/2, //y position is also centered 
@@ -100,7 +99,6 @@ const CameraHandler = ({ slideDistance }) => {
   };
 
   const panIn = async()=>{
-
     await CameraControlsRef.current.setLookAt(
       slide * (viewport.width + slideDistance),
       0,
@@ -121,6 +119,7 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
+  //camera animations on mount and when viewport or homestate changes
   useEffect(() => {
     const resetTimeout = setTimeout(() => {
       if(home){
@@ -134,7 +133,9 @@ const CameraHandler = ({ slideDistance }) => {
 
   useEffect(()=>{
     if(home) return;
-    //when we open the applicaiton we don't want to animate so we check if we're at home or on same slide if it's a different slide we call moveToSlide and assign lastSlide.current to slide
+    //when we open the applicaiton we don't want to animate 
+    //so we check if we're at home or on same slide 
+    //if it's a different slide we call moveToSlide and assign lastSlide.current to slide
     if(lastSlide.current===slide){
       return;
     }
@@ -172,12 +173,33 @@ export const Experience = () => {
   const [,setSlide]=useAtom(slideAtom);
   const [, setHome]=useAtom(homeAtom);
   const [, setHomeDisp]=useAtom(dispAtom);
+
+  const handleSphereClick = async (index) => {
+    const dollyDistance = 10; 
   
-  const handleSphereClick = (index) =>{
-    setSlide(index);
-    setHome(false);
-    setHomeDisp(true);
+    // Ensure CameraControlsRef is not undefined before using it
+    if (CameraControlsRef.current) {
+      await CameraControlsRef.current.setLookAt(
+        index * (viewport.width + slideDistance),
+        0,
+        dollyDistance,
+        index * (viewport.width + slideDistance),
+        0,
+        0,
+        true
+      );
+      setSlide(index);
+      setHome(false);
+      setHomeDisp(true);
+    } else {
+      console.error("CameraControlsRef is not defined.");
+    }
   };
+  
+  //initial slide index=0
+  useEffect(()=>{
+    setSlide(0);
+  },[]);
 
   return (
     <>

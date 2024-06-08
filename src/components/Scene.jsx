@@ -37,14 +37,28 @@ export const Scene =({mainColor, path, ...props})=>{
                     maxPolarAngle={DEG2RAD * 75}
                     minDistance={6}
                     maxDistance={10}
-                    autoRotateSpeed={0.3}
+                    autoRotateSpeed={0.6}
                 />
 
                 <primitive object={scene} scale={ratioScale} />
-                <ambientLight intensity={1} />
+                {/*Podium */}
+                <mesh position={[0,-0.15,0]} receiveShadow>
+                    <cylinderGeometry args={[1.5,1.6,0.2,64]}/>
+                    <meshStandardMaterial color={"#555555"}metalness={0.8} roughness={0.4}/>
+                </mesh>
+
+                <pointLight
+                    position={[0,5,0]}
+                    intensity={1.5}
+                    distance={10}
+                    decay={2}
+                    castShadow
+                />
+
+                <ambientLight intensity={0.5} />
                 <AccumulativeShadows
                     frames={100}
-                    alphaTest={0.9}
+                    alphaTest={0.6}
                     scale={30}
                     position={[0, -0.008, 0]}
                     opacity={0.8}
@@ -67,7 +81,7 @@ export const Scene =({mainColor, path, ...props})=>{
                     position={[0, 5, -2]}
                     form="ring" 
                     intensity={1.5} 
-                    color="#BA5FFF" 
+                    color="#B06FC8" 
                     scale={[10, 5]} 
                     target={[0, 0, 0]}
                 />
