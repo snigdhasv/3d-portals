@@ -60,7 +60,7 @@ export const Scene = ({ mainColor, path, ...props }) => {
                 <primitive object={scene} scale={podiumScale} />
                 {/*Podium */}
                 <mesh position={[0, podiumPositionY, 0]} receiveShadow>
-                    <cylinderGeometry args={[1.5, 1.6, 0.14, 64]} />
+                    <cylinderGeometry args={[2.5, 2.6, 0.14, 64]} />
                     <meshStandardMaterial color={"#555555"} metalness={0.8} roughness={0.4} />
                 </mesh>
 
