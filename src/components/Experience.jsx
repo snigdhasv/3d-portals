@@ -4,6 +4,7 @@ import {
   Environment,
   MeshDistortMaterial,
   RenderTexture,
+  useCursor,
 } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
@@ -215,15 +216,14 @@ export const Experience = () => {
       <Environment preset={"city"} />
       <group>
         {scenes.map((scene, index) => (
-          <mesh
+          <Sphere
             key={index}
-            position-x={index * (viewport.width + slideDistance)}
-            position-y={viewport.height / 2 + 1.5}
-            onClick={() => handleSphereClick(index)}
-          >
-            <sphereGeometry args={[0.7, 64, 64]} />
-            <MeshDistortMaterial color={scene.mainColor} speed={3} />
-          </mesh>
+            index={index}
+            viewport={viewport}
+            slideDistance={slideDistance}
+            scene={scene}
+            handleSphereClick={handleSphereClick}
+          />
         ))}
       </group>
       <CameraHandler slideDistance={slideDistance} sphere={sphere} />
@@ -233,7 +233,7 @@ export const Experience = () => {
         sectionColor={"red"}
         sectionThickness={1}
         cellSize={0.5}
-        cellColor={"#6f6f6f"}
+        cellColor={"#000000"}
         cellThickness={0.6}
         infiniteGrid
         fadeDistance={50}
@@ -255,5 +255,23 @@ export const Experience = () => {
         </mesh>
       ))}
     </>
+  );
+};
+
+const Sphere = ({ index, viewport, slideDistance, scene, handleSphereClick }) => {
+  const [hovered, setHovered] = useState(false);
+  useCursor(hovered, 'pointer');
+
+  return (
+    <mesh
+      position-x={index * (viewport.width + slideDistance)}
+      position-y={viewport.height / 2 + 1.5}
+      onClick={() => handleSphereClick(index)}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
+      <sphereGeometry args={[0.7, 64, 64]} />
+      <MeshDistortMaterial color={scene.mainColor} speed={3} />
+    </mesh>
   );
 };
