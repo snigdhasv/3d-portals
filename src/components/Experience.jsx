@@ -5,14 +5,13 @@ import {
   MeshDistortMaterial,
   RenderTexture,
 } from "@react-three/drei";
-
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { useControls } from "leva";
 import { useEffect, useRef, useState } from "react";
 import { homeAtom, slideAtom } from "./Overlay";
 import { Scene } from "./Scene";
-import {dispAtom} from "./Overlay"
+import { dispAtom } from "./Overlay";
 
 // Array of three scenes with three different models
 export const scenes = [
@@ -36,11 +35,12 @@ export const scenes = [
   },
 ];
 
-const CameraHandler = ({ slideDistance }) => {
+const CameraHandler = ({ slideDistance, sphere }) => {
   const viewport = useThree((state) => state.viewport);
   const [slide, setSlide] = useAtom(slideAtom); // Slide value gives the slide number
   const lastSlide = useRef(0);
-  const[home,setHome]=useAtom(homeAtom);
+  const [home, setHome] = useAtom(homeAtom);
+  const CameraControlsRef = useRef();
 
   // Controls for camera's distance from the scene
   const { dollyDistance } = useControls({
@@ -96,14 +96,6 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
-  const handleSphereClick = () =>{
-    sphereSlidePan();
-    setHome(false);
-    setHomeDisp(true);
-    setSlide(sphere);
-    sphere=0;
-  };
-
   const panIn = async () => {
     await CameraControlsRef.current.setLookAt(
       slide * (viewport.width + slideDistance),
@@ -125,9 +117,9 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
-  const sphereSlidePan = async() => {
+  const sphereSlidePan = async () => {
     await CameraControlsRef.current.setLookAt(
-      (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1) )/2,
+      (viewport.width * (scenes.length - 1) + slideDistance * (scenes.length - 1)) / 2,
       0,
       30,
       sphere * (viewport.width + slideDistance),
@@ -144,7 +136,7 @@ const CameraHandler = ({ slideDistance }) => {
       0,
       true
     );
-  }
+  };
 
   // Camera animations on mount and when viewport or home state changes
   useEffect(() => {
@@ -167,8 +159,16 @@ const CameraHandler = ({ slideDistance }) => {
       return;
     }
     moveToSlide();
-    lastSlide.current=slide;
-  },[slide,home]);
+    lastSlide.current = slide;
+  }, [slide, home]);
+
+  useEffect(() => {
+    if (sphere !== null) {
+      sphereSlidePan();
+      setHome(false);
+      setSlide(sphere);
+    }
+  }, [sphere]);
 
   return (
     <CameraControls
@@ -187,10 +187,8 @@ const CameraHandler = ({ slideDistance }) => {
   );
 };
 
-
-
 export const Experience = () => {
-  //const [sphere, setSphere] = useState(1);
+  const [sphere, setSphere] = useState(null);
   const viewport = useThree((state) => state.viewport);
   const { slideDistance } = useControls({
     slideDistance: {
@@ -200,34 +198,35 @@ export const Experience = () => {
     },
   });
 
-  const [,setSlide]=useAtom(slideAtom);
-  const [, setHome]=useAtom(homeAtom);
-  const [, setHomeDisp]=useAtom(dispAtom);
-  
-  const handleSphereClick = (index) =>{
-    setSlide(index);
+  const [, setSlide] = useAtom(slideAtom);
+  const [, setHome] = useAtom(homeAtom);
+  const [, setHomeDisp] = useAtom(dispAtom);
+
+  const handleSphereClick = (index) => {
+    setSphere(index);
     setHome(false);
     setHomeDisp(true);
+    setSlide(index);
   };
 
   return (
     <>
       <ambientLight intensity={0.2} />
       <Environment preset={"city"} />
-      <CameraHandler slideDistance={slideDistance} />
       <group>
         {scenes.map((scene, index) => (
           <mesh
             key={index}
             position-x={index * (viewport.width + slideDistance)}
             position-y={viewport.height / 2 + 1.5}
-            onClick={() => {handleSphereClick(index)}}
+            onClick={() => handleSphereClick(index)}
           >
             <sphereGeometry args={[0.7, 64, 64]} />
             <MeshDistortMaterial color={scene.mainColor} speed={3} />
           </mesh>
         ))}
       </group>
+      <CameraHandler slideDistance={slideDistance} sphere={sphere} />
       <Grid
         position-y={-viewport.height / 2}
         sectionSize={1}
@@ -249,7 +248,7 @@ export const Experience = () => {
         >
           <planeGeometry args={[viewport.width, viewport.height]} />
           <meshBasicMaterial toneMapped={false}>
-            <RenderTexture attach="map"> 
+            <RenderTexture attach="map">
               <Scene {...scene} />
             </RenderTexture>
           </meshBasicMaterial>
