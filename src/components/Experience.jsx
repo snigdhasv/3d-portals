@@ -10,10 +10,11 @@ import {
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { useControls } from "leva";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { homeAtom, slideAtom } from "./Overlay";
 import { Scene } from "./Scene";
 import {dispAtom} from "./Overlay"
+
 
 //Array of three scenes with three different models
 export const scenes = [
@@ -37,12 +38,17 @@ export const scenes = [
   },
 ];
 
-const CameraHandler = ({ slideDistance }) => {
+let sphere = 0;
+
+const CameraHandler = ({sphere, slideDistance }) => {
+  
+  //const [sphere, setSphere] = useState(1);
   const viewport = useThree((state) => state.viewport);
   const CameraControlsRef = useRef();
   const [slide,setSlide] = useAtom(slideAtom); //slide value gives the slide number
   const lastSlide = useRef(0);
-  const[home,setHome]=useAtom(homeAtom);
+  const [home,setHome] = useAtom(homeAtom);
+  const [homeDisp, setHomeDisp] = useAtom(dispAtom);
 
 
   const { dollyDistance } = useControls({
@@ -99,6 +105,14 @@ const CameraHandler = ({ slideDistance }) => {
     );
   };
 
+  const handleSphereClick = () =>{
+    sphereSlidePan();
+    setHome(false);
+    setHomeDisp(true);
+    setSlide(sphere);
+    sphere=0;
+  };
+
   const panIn = async()=>{
 
     await CameraControlsRef.current.setLookAt(
@@ -126,16 +140,16 @@ const CameraHandler = ({ slideDistance }) => {
       (viewport.width * (scenes.length-1) + slideDistance*(scenes.length-1) )/2,
       0,
       30,
-      slide * (viewport.width + slideDistance),
+      sphere * (viewport.width + slideDistance),
       0,
       0,
       true
     );
     await CameraControlsRef.current.setLookAt(
-      slide * (viewport.width + slideDistance),
+      sphere * (viewport.width + slideDistance),
       0,
       5,
-      slide * (viewport.width + slideDistance),
+      sphere * (viewport.width + slideDistance),
       0,
       0,
       true
@@ -163,6 +177,12 @@ const CameraHandler = ({ slideDistance }) => {
     lastSlide.current=slide;
   },[slide,home]);
 
+  useEffect(() => {
+    setTimeout(()=>{
+      handleSphereClick();
+      
+    },1500);
+  },[sphere]);
 
   return (
     <CameraControls
@@ -184,6 +204,7 @@ const CameraHandler = ({ slideDistance }) => {
 
 
 export const Experience = () => {
+  //const [sphere, setSphere] = useState(1);
   const viewport = useThree((state) => state.viewport);
   const { slideDistance } = useControls({
     slideDistance: {
@@ -193,31 +214,18 @@ export const Experience = () => {
     },
   });
 
-  const [,setSlide]=useAtom(slideAtom);
-  const [, setHome]=useAtom(homeAtom);
-  const [, setHomeDisp]=useAtom(dispAtom);
-  
-  
-
-  const handleSphereClick = (index) =>{
-    sphereSlidePan();
-    setSlide(index);
-    setHome(false);
-    setHomeDisp(true);
-  };
-
   return (
     <>
       <ambientLight intensity={0.2} />
       <Environment preset={"city"} />
-      <CameraHandler slideDistance={slideDistance} />
+      <CameraHandler slideDistance={slideDistance} sphere={sphere} />
       <group>
         {scenes.map((scene, index) => (
           <mesh
             key={index}
             position-x={index * (viewport.width + slideDistance)}
             position-y={viewport.height / 2 + 1.5}
-            onClick={() => {handleSphereClick(index)}}
+            onClick={() => {sphere = index}}
           >
             <sphereGeometry args={[0.7, 64, 64]} />
             <MeshDistortMaterial color={scene.mainColor} speed={3} />

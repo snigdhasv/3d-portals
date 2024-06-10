@@ -36,12 +36,13 @@ export const Overlay = () => {
  function handleLogoClick()
  {
     setHome(!home);
-    useEffect(()=>{setTimeout(() => {
+    setTimeout(() => {
       if(home)
-        setHomeDisp(false);
+        setHomeDisp(true);
       else 
         setHomeDisp(false);
-    }, 1000);})
+    }, 1000);
+    
   };
 
   return (
