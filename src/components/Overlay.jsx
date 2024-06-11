@@ -31,7 +31,7 @@ export const Overlay = () => {
     setTimeout(() => {
       setDisplaySlide(slide);
       setVisible(true);
-    }, 2000);
+    }, 2600);
   }, [slide]);
 
 

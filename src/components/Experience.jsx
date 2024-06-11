@@ -5,6 +5,7 @@ import {
   MeshDistortMaterial,
   RenderTexture,
   useCursor,
+  OrbitControls
 } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
@@ -13,6 +14,8 @@ import { useEffect, useRef, useState } from "react";
 import { homeAtom, slideAtom } from "./Overlay";
 import { Scene } from "./Scene";
 import { dispAtom } from "./Overlay";
+import { a, useSpring } from "@react-spring/three";
+//import Background from "three/examples/jsm/renderers/common/Background.js";
 
 // Array of three scenes with three different models
 export const scenes = [
@@ -98,15 +101,15 @@ const CameraHandler = ({ slideDistance, sphere }) => {
   };
 
   const panIn = async () => {
-    await CameraControlsRef.current.setLookAt(
-      slide * (viewport.width + slideDistance),
-      0,
-      30,
-      slide * (viewport.width + slideDistance),
-      0,
-      0,
-      true
-    );
+    // await CameraControlsRef.current.setLookAt(
+    //   slide * (viewport.width + slideDistance),
+    //   0,
+    //   30,
+    //   slide * (viewport.width + slideDistance),
+    //   0,
+    //   0,
+    //   true
+    // );
     await CameraControlsRef.current.setLookAt(
       slide * (viewport.width + slideDistance),
       0,
@@ -142,12 +145,13 @@ const CameraHandler = ({ slideDistance, sphere }) => {
   // Camera animations on mount and when viewport or home state changes
   useEffect(() => {
     const resetTimeout = setTimeout(() => {
+      
       if (home) {
         panOut();
       } else {
         panIn();
       }
-    }, 1000);
+    }, 2000);
     return () => clearTimeout(resetTimeout);
   }, [slide, home]);
 
@@ -159,15 +163,16 @@ const CameraHandler = ({ slideDistance, sphere }) => {
     if (lastSlide.current === slide) {
       return;
     }
-    moveToSlide();
+    if(true){
+      moveToSlide(); }
     lastSlide.current = slide;
   }, [slide, home]);
 
   useEffect(() => {
     if (sphere !== null) {
+      //setHome(false);
+      //setSlide(sphere);
       sphereSlidePan();
-      setHome(false);
-      setSlide(sphere);
     }
   }, [sphere]);
 
@@ -214,6 +219,7 @@ export const Experience = () => {
     <>
       <ambientLight intensity={0.2} />
       <Environment preset={"city"} />
+      <OrbitControls/>
       <group>
         {scenes.map((scene, index) => (
           <Sphere
@@ -262,16 +268,23 @@ const Sphere = ({ index, viewport, slideDistance, scene, handleSphereClick }) =>
   const [hovered, setHovered] = useState(false);
   useCursor(hovered, 'pointer');
 
+  // Define spring animation for scale
+  const { scale } = useSpring({
+    scale: hovered ? 1.2 : 1,
+    config: { tension: 300, friction: 20 },
+  });
+
   return (
-    <mesh
+    <a.mesh
       position-x={index * (viewport.width + slideDistance)}
       position-y={viewport.height / 2 + 1.5}
+      scale={scale} // Apply animated scale
       onClick={() => handleSphereClick(index)}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
       <sphereGeometry args={[0.7, 64, 64]} />
       <MeshDistortMaterial color={scene.mainColor} speed={3} />
-    </mesh>
+    </a.mesh>
   );
 };
