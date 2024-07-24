@@ -1,65 +1,71 @@
-# Fabrik Spatial App
+# 3D Interactive Experience with React Three Fiber
 
-The boilerplate is almost the absolute minimum that you need to get React Three Fiber to display a Three.js scene. We will make many additions to the boilerplate as we progress with the lessons.
+This project is a 3D interactive experience built using React Three Fiber (R3F), Three.js, Jotai for state management, and Leva for parameter control. The application allows users to navigate between different 3D models with smooth camera transitions and interactive UI elements.
 
-# Create a project folder 
+## Features
 
-Open a command/terminal prompt and create a new folder on your system somewhere.
+- **Interactive 3D Models**: View and interact with different 3D models.
+- **Smooth Camera Transitions**: Smooth transitions and animations between different slides.
+- **User Interface Overlay**: UI overlay with navigation controls and descriptions for each slide.
+- **Clickable Spheres**: Clickable spheres to switch between different slides.
+- **Responsive Design**: Adapts to different viewport sizes and maintains consistent visual quality.
 
-```mkdir react-three-fiber-boilerplate ```
+## Getting Started
 
-# CD into the new folder
+### Prerequisites
 
-```cd react-three-fiber-boilerplate```
+- threejs
+- react three fiber
+- npm or yarn
 
-# Clone the repository 
-```git clone https://github.com/fabrik-space/spatial-app-boilerplate.git```
+### Installation
 
+1. Clone the repository:
 
-# Setup development environment 
-# VSCode 
+   ```bash
+   git clone https://github.com/snigdhasv/Teleportation-threejs.git
+   cd Teleportation-threejs
+   ```
 
-To begin, we should ensure that we've set up an IDE (Integrated Development Environment) to develop with.
-If you don't have VSCode already installed, then you can install it from - [VScode](https://code.visualstudio.com.) 
+2. Install dependencies:
 
-# NodeJS
-We also need Node.js, which includes NPM, since we will be using the npm and npx commands.
-To check if Node.js is already installed, open a cmd/terminal/shell prompt and type,
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-```node -v```
-You should get a response indicating a version number
-For example 
+### Running the Application
 
-```v18.14.0```
-Your version should be equal to or higher than v18.0.0.
+To start the development server:
 
-We can also check the version of NPM,
-```npm -v```
-You want to see no error, but instead a version number equal to, or higher than v8.0.0.
+```bash
+npm start
+# or
+npm run dev
+# or
+yarn start
+```
 
-# Run the app
-Once you have setup the devlopemnt environment, Open the project on VSCode. Make sure you are under the project folder if not ```cd spatial-app-boilerplate```, 
-Now open a new terminal within VScode and install all dependencies using
+Open dedicated localhost to view it in the browser.
 
-```npm install```
+## Project Structure
 
-To run the application with local devlopement server
-```npm run dev```
+- `App.jsx`: The main entry point of the application. Sets up the Canvas, Leva, Overlay, and Experience components.
+- `components/Experience.jsx`: Contains the main 3D experience logic, including scenes, camera controls, and clickable spheres.
+- `components/Scene.jsx`: Handles loading and rendering of individual 3D models and their environments.
+- `components/Overlay.jsx`: Manages the UI overlay, including navigation buttons and slide descriptions.
 
-<img width="1429" alt="Screenshot 2024-05-16 at 12 08 53 PM" src="https://github.com/fabrik-space/spatial-app-boilerplate/assets/67771257/1a977f72-8ceb-4c37-aa75-c7e2574aee16">
+## Contributing
 
-You should be able to see a red color cube on canvas, you can interact and get started with it
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-Within you're terminal you should see 
-```spatial-app-boilerplate git:(main)```
+## Acknowledgements
 
-Which means you're under the main branch of the project,
-Checkout from the current main branch to a new branch where you can start making changes 
-```git checkout -b "your-branch-name"```
-
-Based on the module you start, Replace "your-branch-name" with a preffered branch name and associated task for example :
-```git checkout -b "module-1/upload-model"```
-
-Once done with changes you can raise a pull request against the main branch and request review
-
-
+- [React](https://reactjs.org/)
+- [React Three Fiber](https://github.com/pmndrs/react-three-fiber)
+- [Three.js](https://threejs.org/)
+- [@react-three/drei](https://github.com/pmndrs/drei)
+- [jotai](https://github.com/pmndrs/jotai)
+- [react-spring](https://github.com/pmndrs/react-spring)
+- [leva](https://github.com/pmndrs/leva)
